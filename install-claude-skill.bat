@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 if "%~1"=="" (
     echo 사용법: install-claude-skill.bat ^<디렉토리명^>
-    echo 예시:   install-claude-skill.bat harness-commit-message
+    echo 예시:   install-claude-skill.bat commit-message
     exit /b 1
 )
 
@@ -40,6 +40,13 @@ if exist "%SOURCE_DIR%\skills" (
         for %%f in ("%%d\*.md") do (
             copy /y "%%f" "%TARGET_DIR%\skills\!SKILL_NAME!\" >nul
             echo   [skills] !SKILL_NAME!/%%~nxf 설치 완료
+        )
+        if exist "%%d\scripts" (
+            if not exist "%TARGET_DIR%\skills\!SKILL_NAME!\scripts" mkdir "%TARGET_DIR%\skills\!SKILL_NAME!\scripts"
+            for %%s in ("%%d\scripts\*") do (
+                copy /y "%%s" "%TARGET_DIR%\skills\!SKILL_NAME!\scripts\" >nul
+                echo   [skills] !SKILL_NAME!/scripts/%%~nxs 설치 완료
+            )
         )
     )
 ) else (

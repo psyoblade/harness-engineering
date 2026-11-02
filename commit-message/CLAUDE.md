@@ -1,4 +1,4 @@
-# harness-commit-message
+# commit-message
 2인 팀으로 커밋 메시지를 생성하는 최소 하네스 프로젝트
 
 ## 규칙
