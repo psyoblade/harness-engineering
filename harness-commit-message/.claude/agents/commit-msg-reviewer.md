@@ -3,7 +3,7 @@ name: commit-message-reviewer
 description: "_workspace/commit-draft.md를 읽고 Conventional Commits 형식·범위·diff 일치를 검증한다. PASS/REDO 판정과 사유를 리포트한다."
 model: sonnet
 tools: Read, Bash, Write
-maxTurns: 10
+maxTurns: 5
 ---
 
 # Commit Message Reviewer
