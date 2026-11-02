@@ -12,6 +12,7 @@ allowed-tools: Bash Read Write
    `git diff --cached --quiet` 를 실행한다.
    exit code 1(변경 있음)이면 통과, exit code 0(변경 없음)이면 "먼저 `git add`" 안내 후 종료.
    통과 시 `mkdir -p _workspace` 로 작업 디렉토리를 생성한다.
+   `.gitignore`에 `_workspace/` 항목이 없으면 파일 끝에 추가한다 (`.gitignore`가 없으면 새로 생성).
 2. author 호출.
    `commit-message-author` 에이전트를 Agent 도구로 호출.
    출력은 `_workspace/commit-draft.md`.
