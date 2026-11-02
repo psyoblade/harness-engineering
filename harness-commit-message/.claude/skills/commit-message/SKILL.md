@@ -5,7 +5,7 @@ allowed-tools: Bash Read Write
 ---
 
 # Commit Message Skill
-2인 팀을 순차로 호출해 Conventional Commits 형식의 커밋 메시지를 생성한다.
+2인 팀을 순차로 호출해 Conventional Commits 형식의 커밋 메시지를 생성한다. 메시지 제시까지만 하며 `git commit`·`git push`는 실행하지 않는다 (커밋은 사용자가 직접 한다).
 
 ## Workflow
 1. Precondition 체크.

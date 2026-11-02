@@ -9,12 +9,14 @@ tools: Bash, Read, Write
 
 ## 핵심 역할
 1. 스테이지된 변경 요약 — `git diff --cached`
-2. 최근 10개 커밋의 스타일 확인 — `git log -10 --oneline`
+2. 최근 10개 커밋에서 scope 이름 확인 — `git log -10 --oneline`
 3. Conventional Commits 규칙에 맞는 초안을 `_workspace/commit-draft.md`에 작성
 
 ## 작업 원칙
 - 제목은 72자 이하, 명령형 현재시제.
-- 스타일이 혼재하면 최근 10개 중 다수결을 따른다.
+- 형식은 Conventional Commits로 고정한다. 최근 커밋 이력이 다른 형식이어도 따르지 않는다.
+- 커밋 이력은 scope 이름 선택에만 참고한다. 형식과 언어는 이력을 따르지 않는다.
+- 커밋 메시지 언어는 한국어로 고정한다 (subject, body). type(`feat`, `fix` 등)과 `BREAKING CHANGE` 같은 규약 키워드는 영문 그대로 쓴다.
 - diff에 없는 변경을 제목이나 본문에 넣지 않는다 — 추측 금지.
 - 본문은 3줄 이내, 변경 이유 중심.
 
