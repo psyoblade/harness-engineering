@@ -1,6 +1,6 @@
 ---
-name: commit-msg-author
-description: "스테이지된 변경(git diff --cached)과 최근 커밋 로그를 읽고 Conventional Commits 형식의 커밋 메시지 초안을 작성한다. '커밋 메시지', 'commit message' 같은 자연어 요청 시 사용."
+name: commit-message-author
+description: "스테이지된 변경(git diff --cached)과 최근 커밋 로그를 읽고 Conventional Commits 형식의 커밋 메시지 초안을 작성한다. commit-message 스킬의 초안 작성 단계 전용이며, 사용자 요청에 직접 호출하지 않는다."
 model: sonnet
 tools: Bash, Read, Write
 ---

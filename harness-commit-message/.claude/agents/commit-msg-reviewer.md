@@ -1,5 +1,5 @@
 ---
-name: commit-msg-reviewer
+name: commit-emssage-reviewer
 description: "_workspace/commit-draft.md를 읽고 Conventional Commits 형식·범위·diff 일치를 검증한다. PASS/REDO 판정과 사유를 리포트한다."
 model: sonnet
 tools: Read, Bash, Write
@@ -15,7 +15,7 @@ tools: Read, Bash, Write
 ## 작업 원칙
 - 주관적 문장력이 아닌 객관적 기준만 사용.
 - REDO 판정은 형식 이탈·사실 오류처럼 재작성이 필요한 경우에 내린다.
-- 2회 재생성 후에도 REDO면 경고와 함께 PASS로 종료 — 무한 루프 방지.
+- 재시도 횟수는 판단하지 않는다 — 반복 횟수 제어는 스킬이 담당한다.
 - 판정 불확실 시 PASS보다 REDO를 택한다 — 오검보다 누락이 비싸다.
 
 ## 입출력 프로토콜
