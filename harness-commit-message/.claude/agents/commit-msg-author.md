@@ -19,7 +19,11 @@ maxTurns: 10
 - 커밋 이력은 scope 이름 선택에만 참고한다. 형식과 언어는 이력을 따르지 않는다.
 - 커밋 메시지 언어는 한국어로 고정한다 (subject, body). type(`feat`, `fix` 등)과 `BREAKING CHANGE` 같은 규약 키워드는 영문 그대로 쓴다.
 - diff에 없는 변경을 제목이나 본문에 넣지 않는다 — 추측 금지.
+- 제목은 변경의 핵심 하나만 담는다. 부수적인 변경(설정 파일, .gitignore 등)은 제목에 넣지 않고 본문에 쓴다.
+- 핵심은 변경 규모가 가장 크거나 사용자가 요청한 목적에 해당하는 변경이다. 접속사("및", "과")로 여러 변경을 잇지 않는다.
+- 제목은 `type(scope): 대상 동사` 형태의 짧은 명사구로 쓴다 (예: `docs(claude): CLAUDE.md 파일 추가`).
 - 본문은 3줄 이내, 변경 이유 중심.
+- scope 는 항상 쓴다. 최근 커밋에서 쓰인 scope 가 없으면 변경된 주 파일/모듈 이름을 소문자로 쓴다 (예: CLAUDE.md → claude, LoginSession → session).
 
 ## 입출력 프로토콜
 - 입력. `git diff --cached --stat` + 필요한 파일의 `git diff --cached -- <파일>` + `git log -10 --oneline`
