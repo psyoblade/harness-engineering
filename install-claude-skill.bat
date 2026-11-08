@@ -48,6 +48,13 @@ if exist "%SOURCE_DIR%\skills" (
                 echo   [skills] !SKILL_NAME!/scripts/%%~nxs 설치 완료
             )
         )
+        if exist "%%d\references" (
+            if not exist "%TARGET_DIR%\skills\!SKILL_NAME!\references" mkdir "%TARGET_DIR%\skills\!SKILL_NAME!\references"
+            for %%r in ("%%d\references\*") do (
+                copy /y "%%r" "%TARGET_DIR%\skills\!SKILL_NAME!\references\" >nul
+                echo   [skills] !SKILL_NAME!/references/%%~nxr 설치 완료
+            )
+        )
     )
 ) else (
     echo   [skills] 없음, 건너뜀
