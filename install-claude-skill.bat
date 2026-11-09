@@ -31,6 +31,24 @@ if exist "%SOURCE_DIR%\agents" (
     echo   [agents] 없음, 건너뜀
 )
 
+:: settings.json 복사 (에이전트 git 명령 차단 목록)
+if exist "%SOURCE_DIR%\settings.json" (
+    if exist "%TARGET_DIR%\settings.json" (
+        set /p "CONFIRM=  [settings] %TARGET_DIR%\settings.json 이 이미 존재합니다. 덮어쓰시겠습니까? [y/N] "
+        if /i "!CONFIRM!"=="y" (
+            copy /y "%SOURCE_DIR%\settings.json" "%TARGET_DIR%\settings.json" >nul
+            echo   [settings] settings.json 덮어쓰기 완료
+        ) else (
+            echo   [settings] settings.json 건너뜀
+        )
+    ) else (
+        copy /y "%SOURCE_DIR%\settings.json" "%TARGET_DIR%\settings.json" >nul
+        echo   [settings] settings.json 설치 완료
+    )
+) else (
+    echo   [settings] 없음, 건너뜀
+)
+
 :: skills 복사 (하위 디렉토리 포함)
 if exist "%SOURCE_DIR%\skills" (
     if not exist "%TARGET_DIR%\skills" mkdir "%TARGET_DIR%\skills"
@@ -46,6 +64,13 @@ if exist "%SOURCE_DIR%\skills" (
             for %%s in ("%%d\scripts\*") do (
                 copy /y "%%s" "%TARGET_DIR%\skills\!SKILL_NAME!\scripts\" >nul
                 echo   [skills] !SKILL_NAME!/scripts/%%~nxs 설치 완료
+            )
+        )
+        if exist "%%d\references" (
+            if not exist "%TARGET_DIR%\skills\!SKILL_NAME!\references" mkdir "%TARGET_DIR%\skills\!SKILL_NAME!\references"
+            for %%r in ("%%d\references\*") do (
+                copy /y "%%r" "%TARGET_DIR%\skills\!SKILL_NAME!\references\" >nul
+                echo   [skills] !SKILL_NAME!/references/%%~nxr 설치 완료
             )
         )
     )
