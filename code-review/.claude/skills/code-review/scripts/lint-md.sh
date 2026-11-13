@@ -34,7 +34,14 @@ tbl=$(printf '%s\n' "$md" | awk '
   { cols=0 }')
 [ -n "$tbl" ] && { echo "$tbl"; fail=1; }
 
-# 6. 도구 부재 안내 문구 금지
+# 6. 🔴 항목은 바로 다음 줄에 재현·발생 조건 근거가 있어야 한다
+crit=$(printf '%s\n' "$md" | awk '
+  pend { if ($0 !~ /재현:/ || $0 !~ /발생 조건:/) printf "FAIL: 🔴 항목에 재현·발생 조건 줄 없음 (%d행)\n", pend; pend=0 }
+  /^ *- 🔴/ { pend=NR }
+  END { if (pend) printf "FAIL: 🔴 항목에 재현·발생 조건 줄 없음 (%d행)\n", pend }')
+[ -n "$crit" ] && { echo "$crit"; fail=1; }
+
+# 7. 도구 부재 안내 문구 금지
 printf '%s\n' "$md" | grep -nE '찾을 수 없|설치되어 있지 않|도구가 없|CLI 없음' | while read -r l; do echo "WARN: 도구 부재 안내로 보이는 문구 (${l%%:*}행)"; done
 
 if [ "$fail" -eq 0 ]; then echo "RESULT: PASS"; else echo "RESULT: FAIL"; fi
