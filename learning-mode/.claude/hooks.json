@@ -1,0 +1,12 @@
+{
+  "UserPromptSubmit": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "{CLAUDE_HOME}/hooks/learning-mode.sh"
+        }
+      ]
+    }
+  ]
+}
