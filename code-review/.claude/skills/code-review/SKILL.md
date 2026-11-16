@@ -16,7 +16,7 @@ allowed-tools: Bash Agent Read Write AskUserQuestion
 ## 경로
 스킬이 로드될 때 알려 주는 Base directory 로 절대 경로를 만들고, 이하 `<scripts>`, `<refs>` 로 표기한다.
 - `<scripts>/resolve-target.sh` — 대상 확정·프로파일 판정. 종료 코드 0 = OK, 2 = ASK, 1 = ERROR
-- `<scripts>/verify-locations.sh <SOURCE_SHA>` — 지적 위치(stdin) 검사. 마지막 줄 `RESULT: PASS|FAIL`
+- `<scripts>/verify-locations.sh <SOURCE_SHA> <MERGE_BASE>` — 지적 위치(stdin)가 실재하는지, 신규 지적이 변경 범위에 닿는지 검사. 마지막 줄 `RESULT: PASS|FAIL`
 - `<scripts>/lint-md.sh <파일>` — 최종 md 검사. 마지막 줄 `RESULT: PASS|FAIL`
 - `<refs>/finding-format.md`, `output-template.md`, `platform-guide.md`, `general-guide.md`
 
@@ -30,10 +30,10 @@ allowed-tools: Bash Agent Read Write AskUserQuestion
 2. 리뷰어 병렬 호출.
    한 메시지에서 Agent 도구를 동시에 호출한다. 각 프롬프트에 리뷰 컨텍스트와 `<refs>/finding-format.md` 절대 경로를 넣는다.
    - `code-review-lexical` — 항상
-   - `code-review-platform` — 항상. PROFILE 이 `general` 이면 `<refs>/general-guide.md`, 아니면 `<refs>/platform-guide.md` 경로를 함께 넣는다
+   - `code-review-platform` — KIND=docs (문서만 바뀜) 이면 SKIPPED. 아니면 항상. PROFILE 이 `general` 이면 `<refs>/general-guide.md`, 아니면 `<refs>/platform-guide.md` 경로를 함께 넣는다
    - `code-review-advisor` — SIZE=LARGE 이거나 `--deep` 일 때만. 아니면 SKIPPED
 3. 위치 검증.
-   리뷰어 결과마다 `bash "<scripts>/verify-locations.sh" <SOURCE_SHA> <<'EOF'` heredoc 으로 검사해 INVALID 줄을 모은다.
+   모든 리뷰어 결과에서 지적의 `위치:`, `도달 경로:`, `구분:` 줄만 나온 순서대로 모아 `bash "<scripts>/verify-locations.sh" <SOURCE_SHA> <MERGE_BASE> <<'EOF'` heredoc 으로 한 번에 검사한다 (결과 전문을 다시 쓰지 않는다). 지적이 하나도 없으면 실행하지 않고 PASS 로 본다. INVALID, MISMATCH 줄을 모은다.
 4. chair 판정.
    `code-review-chair` 를 모드 `judge` 로 호출한다. 프롬프트에 리뷰 컨텍스트, 리뷰어 결과 전체, 3단계 결과, `<refs>/output-template.md` 경로를 넣는다.
    - REDO 가 없으면 `## 최종 리뷰` 아래 본문을 최종 md 로 받고 6단계로 간다.
