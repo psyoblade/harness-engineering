@@ -62,11 +62,11 @@ reviser 는 G1 이 끝나기 전에는 시작할 수 없다. 팀원이 끝낸 �
    - V1 `python3 <scripts>/check_report.py revise <book> <ws>/04_revise.md` → PASS
    - V2 `python3 <scripts>/lint.py <ws>/book` → ERROR 가 0 이거나 `00_baseline.txt` 보다 적음
    - V3 생략 판정: `python3 <scripts>/book_sync.py code <ws>/book.prev <ws>/book` 가 `CODE=0` 이면 (코드 블록 안 명령·출력이 바뀌지 않았으면) V3 를 생략하고 직전 V3 결과를 그대로 쓴다.
-   - V3 lab 재검증: TaskCreate 로 `V<n> lab 재검증` 태스크를 `lab` 에 배정한다. 입력은 `book=<ws>/book`, `output_dir=<ws>/verify-<n>/`, `prev_dir=<ws>`(첫 회) 또는 `<ws>/verify-<n-1>/`, `changes=<book_sync.py diff 결과>` (재검증 모드 — 바뀐 부분만 읽는다). `lab` 이 종료됐으면 같은 agent type 으로 다시 생성한다. 결과 `verify-<n>/02_lab.md` 에서 유형이 `실행 실패`, `출력 불일치` 인 행 → 0 건
+   - V3 lab 재검증: TaskCreate 로 `V<n> lab 재검증` 태스크를 `lab` 에 배정한다. 입력은 `book=<ws>/book`, `output_dir=<ws>/verify-<n>/`, `prev_dir=<ws>`(첫 회) 또는 `<ws>/verify-<n-1>/`, `changes=<book_sync.py diff 결과>` (재검증 모드 — 바뀐 부분만 읽는다). `lab` 이 종료됐으면 같은 agent type 으로 다시 생성한다. 판정은 `python3 <scripts>/check_report.py lab <ws>/book <ws>/verify-<n>/02_lab.md` 로 한다 (직전 V3 리포트가 있으면 그 경로를 마지막 인자로 준다) → RESULT 가 PASS 이고 `TYPES:` 줄의 `실행 실패`, `출력 불일치` 가 0
    - V4 `python3 <scripts>/book_sync.py diff <book> <ws>/book` → `D`(삭제) 항목은 `04_revise.md` 에 삭제로 기록된 파일만 허용 (복사 누락 방지)
 2. 모두 통과하면 Phase 5 로 간다.
 3. 실패하면 실패 내용(V1 의 BAD 줄, V2 의 ERROR 줄, V3 의 해당 행, V4 의 기록 없는 D 항목)을 모아 `R<n> 수정 반복` 태스크를 `reviser` 에 배정한다 (입력에 `feedback` 포함). 끝나면 1 로 돌아간다.
-4. 직전 반복과 같은 실패(같은 파일:줄·유형)가 다시 나오면 진전이 없는 것이므로 바로 루프를 멈춘다. 3회째에도 실패하면 루프를 멈추고, 남은 실패를 그대로 Phase 5 보고서에 "자동 검증 미통과" 로 표시한다.
+4. V3 판정의 `REPEAT:` 가 1 이상이면 (직전 V3 와 같은 파일·step·유형의 실패가 다시 나옴) 진전이 없는 것이므로 바로 루프를 멈춘다. 3회째에도 실패하면 루프를 멈추고, 남은 실패를 그대로 Phase 5 보고서에 "자동 검증 미통과" 로 표시한다.
 
 ### Phase 5. 사람 검토, 반영, 정리
 1. `<ws>/remaster_report.md` 를 쓴다.

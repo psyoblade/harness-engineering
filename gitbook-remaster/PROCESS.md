@@ -62,6 +62,7 @@ gitbook-remaster/
 | 5 통합 | `_workspace/remaster_report.md`, 승인 시 브랜치·PR 생성 |
 
 ## 결정 기록
+- 2026-11-16: lab_run 에 `plan`(골격 생성, 단계 id 고정)·`run --log`(화면에는 실패 단계만)·`compare`(달라진 단계) 추가, check_report lab 에 유형 검사·`TYPES`·`REPEAT`·run.log 교차 확인 추가 → V3 판정과 반복 실패 판정을 스크립트로. 스크립트 단위 확인만 했고 팀 실행은 미검증
 - 2026-11-12: 6단계 실제 팀 실행 성공($2.99, 27분, V1~V4 PASS, review/20261112 커밋). new-style 병합 삭제 유지, 컨테이너 git 2.34.1 확인
 - 2026-11-12: gitbook-linter 를 haiku 로 전환 — 단독 실행 $0.026, 정답지 lint 13/14(sonnet 실행 11/13), 신규 L14
 - 2026-11-12: 실습 컨테이너 ubuntu:22.04 고정(-multi 미사용), training 레포 compose `version` 제거, 사람 판단 잔여 모두 반영, V3 생략 판정(`book_sync.py code`) 추가
