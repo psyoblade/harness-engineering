@@ -14,6 +14,8 @@ PLATFORM_DEP_RE='bigbrother-(flow|common)'                         # gradle 의�
 SHARED_LIB_NAME_RE="rootProject\.name *= *['\"]bigbrother-(flow|common)"  # 공유 라이브러리 자신
 PY_FLOW_PKG_RE='flow-client-python'   # Python flow 클라이언트 패키지 (setup.py name, requirements)
 SPARK_RE='org\.apache\.spark|spark-(core|sql|streaming)|pyspark'
+DOC_RE='\.(md|txt|rst|adoc|png|jpe?g|gif|svg)$'   # 변경 파일이 모두 해당하면 KIND=docs (platform 생략 기준)
+DOC_EXCLUDE_RE='(^|/)\.claude/'                  # 에이전트·스킬 정의는 동작을 바꾸므로 code 로 본다
 # bash(build.sh) 프로젝트는 항상 general (플랫폼 표지 방식 미정)
 # --------------------------------------------------------------------------
 
@@ -99,6 +101,9 @@ read -r files added deleted < <(git diff --numstat "$base" "$src_sha" |
 [ "$commits" -gt "$MAX_COMMITS_SANE" ] && ask+=("커밋 $commits 개 — target 오지정 의심")
 [ "$files" -gt "$MAX_FILES_SANE" ] && ask+=("변경 파일 $files 개 — target 오지정 의심")
 if [ "$files" -le "$MAX_FILES_SMALL" ] && [ $((added + deleted)) -le "$MAX_LINES_SMALL" ]; then size=SMALL; else size=LARGE; fi
+names=$(git -c core.quotepath=false diff --name-only "$base" "$src_sha")
+nondoc=$(grep -vE "$DOC_RE" <<<"$names"; grep -E "$DOC_EXCLUDE_RE" <<<"$names")
+if [ -n "$names" ] && [ -z "$nondoc" ]; then kind=docs; else kind=code; fi
 
 # ---- 프로파일 판정 (source 버전 트리 기준) ----------------------------------
 tree_files() { git ls-tree -r --name-only "$1"; }
@@ -153,7 +158,7 @@ fi
 out SOURCE_REF "$src_ref"; out SOURCE_SHA "$src_sha"
 out TARGET_REF "$tgt_ref"; out TARGET_SHA "$tgt_sha"
 out MERGE_BASE "$base"
-out COMMITS "$commits"; out FILES "$files"; out ADDED "$added"; out DELETED "$deleted"; out SIZE "$size"
+out COMMITS "$commits"; out FILES "$files"; out ADDED "$added"; out DELETED "$deleted"; out SIZE "$size"; out KIND "$kind"
 out PROFILE "$profile"; out PROFILE_EVIDENCE "$evidence"; out BUILD "${builds:-none}"
 [ -n "$note" ] && out PROFILE_NOTE "$note"
 out SPARK "$spark"; out REPO_CLAUDE_MD "$claude_md"

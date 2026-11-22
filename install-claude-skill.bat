@@ -31,22 +31,10 @@ if exist "%SOURCE_DIR%\agents" (
     echo   [agents] 없음, 건너뜀
 )
 
-:: settings.json 복사 (에이전트 git 명령 차단 목록)
+:: settings.json 은 설치하지 않는다 (전역 settings.json 을 덮어쓰지 않기 위해서다).
+:: 에이전트의 git 명령 차단은 각 에이전트 정의의 denyGit 과 git-guard 훅이 맡는다.
 if exist "%SOURCE_DIR%\settings.json" (
-    if exist "%TARGET_DIR%\settings.json" (
-        set /p "CONFIRM=  [settings] %TARGET_DIR%\settings.json 이 이미 존재합니다. 덮어쓰시겠습니까? [y/N] "
-        if /i "!CONFIRM!"=="y" (
-            copy /y "%SOURCE_DIR%\settings.json" "%TARGET_DIR%\settings.json" >nul
-            echo   [settings] settings.json 덮어쓰기 완료
-        ) else (
-            echo   [settings] settings.json 건너뜀
-        )
-    ) else (
-        copy /y "%SOURCE_DIR%\settings.json" "%TARGET_DIR%\settings.json" >nul
-        echo   [settings] settings.json 설치 완료
-    )
-) else (
-    echo   [settings] 없음, 건너뜀
+    echo   [settings] %~1\.claude\settings.json 은 프로젝트용 설정이라 전역에 설치하지 않습니다.
 )
 
 :: skills 복사 (하위 디렉토리 포함)
@@ -76,6 +64,17 @@ if exist "%SOURCE_DIR%\skills" (
     )
 ) else (
     echo   [skills] 없음, 건너뜀
+)
+
+:: 에이전트가 denyGit 을 쓰는데 git-guard 훅이 없으면 알려 준다
+if exist "%SOURCE_DIR%\agents" (
+    findstr /m /b "denyGit:" "%SOURCE_DIR%\agents\*.md" >nul 2>&1 && (
+        if not exist "%TARGET_DIR%\hooks\git-guard.sh" (
+            echo.
+            echo   [안내] 이 에이전트들은 git 명령 차단 규칙^(denyGit^)을 씁니다. 차단이 동작하려면 한 번 설치하세요:
+            echo          install-claude-hook.bat git-guard
+        )
+    )
 )
 
 echo.

@@ -9,17 +9,18 @@ author가 초안을 쓰고, 검증 스크립트가 형식을 검사하며, 변�
 
 ## 스크립트
 이 스킬 폴더의 `scripts/`에 있다. 스킬이 로드될 때 알려 주는 Base directory로 절대 경로를 만들어 쓰고, 이하 `<scripts>`로 표기한다.
-- `diff-size.sh`. 스테이지된 변경 규모를 판정한다. 첫 줄이 `SMALL`(파일 3개 이하, 변경 100줄 이하) 또는 `LARGE`.
+- `collect-context.sh`. 스테이지된 변경 규모를 판정하고 컨텍스트 파일(변경 파일 목록, 최근 커밋, SMALL 이면 diff 전문)을 만든다. 첫 줄이 `EMPTY`(스테이지된 변경 없음), `SMALL`(파일 20개 이하, 변경 300줄 이하) 또는 `LARGE`. `CONTEXT=` 줄이 컨텍스트 파일 경로다.
 - `validate.sh`. 커밋 메시지(stdin)의 형식을 검사한다. 마지막 줄이 `RESULT: PASS` 또는 `RESULT: FAIL`이고, `WARN:` 줄은 경고다.
 
 ## Workflow
 1. Precondition 체크.
-   `git diff --cached --quiet` 를 실행한다.
-   exit code 1(변경 있음)이면 통과, exit code 0(변경 없음)이면 "먼저 `git add`" 안내 후 종료.
+   `bash "<scripts>/collect-context.sh"` 를 실행한다.
+   첫 줄이 `EMPTY`(스테이지된 변경 없음)이면 "먼저 `git add`" 안내 후 종료.
 2. 규모 판정.
-   `bash "<scripts>/diff-size.sh"` 를 실행해 첫 줄(SMALL | LARGE)을 기억한다.
+   같은 출력의 첫 줄(SMALL | LARGE)과 `CONTEXT=` 줄의 컨텍스트 파일 경로를 기억한다.
 3. author 호출.
-   `commit-message-author` 에이전트를 Agent 도구로 호출. 프롬프트에 `<scripts>/validate.sh` 의 절대 경로를 넣는다 (재호출이면 수정 지시도 함께).
+   `commit-message-author` 에이전트를 Agent 도구로 호출. 프롬프트에 컨텍스트 파일 경로와 `<scripts>/validate.sh` 의 절대 경로를 넣는다 (재호출이면 수정 지시도 함께).
+   이 변경을 왜 했는지 대화에서 알고 있으면 `의도:` 로 1~2줄 덧붙인다. 모르면 넣지 않는다 (지어내지 않는다).
    초안은 author의 최종 응답으로 받는다 (파일을 쓰지 않는다).
 4. 형식 게이트.
    초안을 `bash "<scripts>/validate.sh" <<'EOF'` heredoc 으로 검사한다.
@@ -27,7 +28,7 @@ author가 초안을 쓰고, 검증 스크립트가 형식을 검사하며, 변�
    - `WARN:` 줄은 기억해 두었다가 마지막에 초안과 함께 사용자에게 보여 준다.
 5. 판정 분기.
    - SMALL. reviewer를 생략하고 초안을 제시한 뒤 완료.
-   - LARGE. `commit-message-reviewer` 에이전트를 Agent 도구로 호출 (프롬프트에 초안 전체를 포함하고, diff는 reviewer가 직접 읽는다).
+   - LARGE. `commit-message-reviewer` 에이전트를 Agent 도구로 호출 (프롬프트에 초안 전체와 컨텍스트 파일 경로를 포함하고, author에게 `의도:` 를 넘겼으면 그것도 넣는다. diff는 reviewer가 직접 읽는다).
      - PASS. 초안을 제시하고 완료.
      - REDO. 6단계로 간다.
 6. REDO 처리.

@@ -27,13 +27,16 @@ for %%f in ("%SOURCE_DIR%\hooks\*") do (
     echo   [hooks] %%~nxf 설치 완료
 )
 
-:: settings.json 에 훅 등록 (덮어쓰지 않고 병합, 기존 파일은 settings.json.bak 으로 백업)
+:: settings.json 에 훅 등록 (덮어쓰지 않고 병합, 같은 명령의 기존 등록은 교체, 기존 파일은 settings.json.bak-<시각> 으로 백업)
 if not exist "%SOURCE_DIR%\hooks.json" (
     echo   [settings] hooks.json 없음, 건너뜀
     goto :done
 )
 set "PS=powershell"
 where pwsh >nul 2>&1 && set "PS=pwsh"
+if "%PS%"=="powershell" (
+    echo   [경고] PowerShell 7^(pwsh^)이 없어 Windows PowerShell 5.1 로 병합합니다. 내용은 같지만 settings.json 전체의 들여쓰기가 바뀝니다.
+)
 %PS% -NoProfile -ExecutionPolicy Bypass -File "%~dp0merge-claude-hooks.ps1" -HooksJson "%SOURCE_DIR%\hooks.json" -Settings "%TARGET_DIR%\settings.json" -ClaudeHome "%TARGET_DIR%"
 if errorlevel 1 (
     echo [오류] settings.json 병합에 실패했습니다. 기존 파일은 그대로입니다.

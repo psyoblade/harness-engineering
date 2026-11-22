@@ -4,6 +4,7 @@ description: "code-review 스킬의 설계 리뷰 단계 전용 (필수). 프로
 model: sonnet
 tools: Read, Grep, Glob, Bash
 maxTurns: 20
+denyGit: commit, push, merge, rebase, reset, checkout, switch, stash
 ---
 
 # Code Review — Platform
