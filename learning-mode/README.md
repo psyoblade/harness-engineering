@@ -5,8 +5,10 @@ AI 를 쓰면서도 학습 능력을 잃지 않도록, Claude 가 답 대신 질
 
 ## 설치
 
-```
-install-claude-hook.bat learning-mode
+저장소 루트에서 실행한다 (PowerShell 기준. cmd 에서는 `./` 없이 실행한다).
+
+```powershell
+./install-claude-hook.bat learning-mode
 ```
 
 - `~/.claude/hooks/` 에 `learning-mode.sh`, `learning-mode.md` 를 복사한다.

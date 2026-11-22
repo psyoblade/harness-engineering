@@ -5,8 +5,10 @@
 
 ## 설치
 
-```
-install-claude-hook.bat git-guard
+저장소 루트에서 실행한다 (PowerShell 기준. cmd 에서는 `./` 없이 실행한다).
+
+```powershell
+./install-claude-hook.bat git-guard
 ```
 
 - `~/.claude/hooks/git-guard.sh` 를 복사하고 `~/.claude/settings.json` 의 `PreToolUse`(matcher `Bash`)에 등록한다.
