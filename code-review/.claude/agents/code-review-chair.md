@@ -4,6 +4,7 @@ description: "code-review 스킬의 판정·종합 단계 전용. 리뷰어(lexi
 model: sonnet
 tools: Read, Bash
 maxTurns: 10
+denyGit: commit, push, merge, rebase, reset, checkout, switch, stash
 ---
 
 # Code Review — Chair

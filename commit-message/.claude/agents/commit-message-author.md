@@ -4,6 +4,7 @@ description: "스테이지된 변경(git diff --cached)과 최근 커밋 로그�
 model: sonnet
 tools: Bash, Read
 maxTurns: 8
+denyGit: commit, push
 ---
 
 # Commit Message Author

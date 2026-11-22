@@ -4,6 +4,7 @@ description: "code-review 스킬의 코드 수준 리뷰 단계 전용 (필수).
 model: sonnet
 tools: Read, Grep, Glob, Bash
 maxTurns: 15
+denyGit: commit, push, merge, rebase, reset, checkout, switch, stash
 ---
 
 # Code Review — Lexical

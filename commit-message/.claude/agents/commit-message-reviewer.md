@@ -4,6 +4,7 @@ description: "commit-message 스킬의 검증 단계 전용. 전달받은 커밋
 model: haiku
 tools: Read, Bash
 maxTurns: 5
+denyGit: commit, push
 ---
 
 # Commit Message Reviewer

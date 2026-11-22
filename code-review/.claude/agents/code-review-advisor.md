@@ -4,6 +4,7 @@ description: "code-review 스킬의 선택 리뷰 단계 전용. 커밋 분리, 
 model: sonnet
 tools: Read, Grep, Glob, Bash
 maxTurns: 12
+denyGit: commit, push, merge, rebase, reset, checkout, switch, stash
 ---
 
 # Code Review — Advisor
