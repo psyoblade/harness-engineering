@@ -10,7 +10,8 @@ install-claude-hook.bat learning-mode
 ```
 
 - `~/.claude/hooks/` 에 `learning-mode.sh`, `learning-mode.md` 를 복사한다.
-- `~/.claude/settings.json` 의 `UserPromptSubmit`, `SessionStart` 에 훅을 추가한다. 기존 훅은 유지되고, 이미 등록돼 있으면 건너뛴다. 변경이 있을 때만 원본을 `settings.json.bak` 으로 백업하고 저장한다.
+- `~/.claude/settings.json` 의 `UserPromptSubmit`, `SessionStart` 에 훅을 추가한다. 다른 훅은 유지되고, 같은 명령이 이미 등록돼 있으면 새 내용으로 교체한다 (경로 표기가 달라도 같은 명령으로 본다). 변경이 있을 때만 원본을 `settings.json.bak-<시각>` 으로 백업하고 저장한다.
+- 업그레이드할 때도 같은 명령으로 다시 설치하면 된다. 다시 설치하고 Claude Code 를 재시작해야 훅 등록(`SessionStart` 등)이 반영된다.
 - Claude Code 를 재시작하면 반영된다. `/hooks` 에서 등록 여부를 확인할 수 있다.
 
 ## 사용법
